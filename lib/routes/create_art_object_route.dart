@@ -13,7 +13,7 @@ class _CreateArtObjectRouteState extends State<CreateArtObjectRoute> {
     return Scaffold(
       body: Center(
         child: Container(
-          child: ,
+          child: const Placeholder(),
         ),
       ),
     );

@@ -5,9 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smolaton/bloc/main_bloc.dart';
 import 'package:smolaton/utils/image_utils.dart';
 import 'package:smolaton/utils/load_animation.dart';
-import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 import '../entities/impl/art_object_entity.dart';
+import '../utils/maps_route.dart';
 
 class MainRoute extends StatefulWidget {
   const MainRoute({super.key});
@@ -79,21 +79,6 @@ class _MainRouteState extends State<MainRoute> {
           )),
     );
   }
-
-  Widget _generateButton(
-      {required VoidCallback onPressed, required Widget child}) {
-    return TextButton(
-        onPressed: onPressed,
-        style: TextButton.styleFrom(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
-          ),
-          backgroundColor: const Color.fromARGB(200, 0, 0, 0),
-          foregroundColor: Colors.white,
-          textStyle: const TextStyle(color: Colors.white, fontSize: 20),
-        ),
-        child: Container(padding: const EdgeInsets.all(5), child: child));
-  }
 }
 
 class FullArtObjectWidget extends StatefulWidget {
@@ -157,25 +142,13 @@ class _FullArtObjectWidgetState extends State<FullArtObjectWidget> {
             "На карте",
             style: TextStyle(fontSize: 24, color: Colors.white),
           ),
-          onPressed: () {},
+          onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      MapWidget(artObject: widget.artObject))),
         ),
       ),
     );
-  }
-}
-
-class MapWidget extends StatefulWidget {
-  final ArtObjectEntity artObject;
-
-  const MapWidget({super.key, required this.artObject});
-
-  @override
-  State<MapWidget> createState() => _MapWidgetState();
-}
-
-class _MapWidgetState extends State<MapWidget> {
-  @override
-  Widget build(BuildContext context) {
-    return const YandexMap();
   }
 }
