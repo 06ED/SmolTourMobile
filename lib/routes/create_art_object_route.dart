@@ -47,6 +47,9 @@ class _CreateArtObjectRouteState extends State<CreateArtObjectRoute> {
   Widget build(BuildContext context) {
     return BlocConsumer<CreateArtObjectBloc, CreateArtObjectState>(
         builder: (context, state) {
+          if (state is AddedArtObjectState) {
+            Navigator.pushNamed(context, "/index");
+          }
           if (isMap) {
             return Scaffold(
               appBar: _getAppBar(),

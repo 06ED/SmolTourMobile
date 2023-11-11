@@ -4,3 +4,5 @@ part of 'create_art_object_bloc.dart';
 abstract class CreateArtObjectState {}
 
 class CreateArtObjectInitial extends CreateArtObjectState {}
+
+class AddedArtObjectState extends CreateArtObjectState {}

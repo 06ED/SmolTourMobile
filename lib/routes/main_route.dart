@@ -17,6 +17,8 @@ class MainRoute extends StatefulWidget {
 }
 
 class _MainRouteState extends State<MainRoute> {
+  final _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<MainBloc, MainState>(
@@ -42,9 +44,21 @@ class _MainRouteState extends State<MainRoute> {
   }
 
   Widget _getArtObjectsWidget(List<ArtObjectEntity> artObjects) {
-    return ListView.builder(
-      itemCount: artObjects.length,
-      itemBuilder: (context, index) => _buildArtObjectItem(artObjects[index]),
+    return RefreshIndicator(
+        key: _refreshIndicatorKey,
+        color: Colors.white,
+        backgroundColor: const Color.fromARGB(170, 0, 0, 0),
+        strokeWidth: 2,
+        onRefresh: () async {
+          context.read<MainBloc>().add(MainInitEvent());
+          return Future<void>.delayed(const Duration(seconds: 4));
+        },
+        // Pull from top to show refresh indicator.
+        child: ListView.builder(
+          itemCount: artObjects.length,
+          itemBuilder: (context, index) =>
+              _buildArtObjectItem(artObjects[index]),
+        ),
     );
   }
 
@@ -151,11 +165,12 @@ class _FullArtObjectWidgetState extends State<FullArtObjectWidget> {
             "На карте",
             style: TextStyle(fontSize: 24, color: Colors.white),
           ),
-          onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      MapWidget(artObject: widget.artObject))),
+          onPressed: () =>
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          MapWidget(artObject: widget.artObject))),
         ),
       ),
     );
