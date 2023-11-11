@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 import '../entities/impl/art_object_entity.dart';
-import 'load_animation.dart';
-import 'location_utils.dart';
+import '../utils/load_animation.dart';
+import '../utils/location_utils.dart';
 
 class MapWidget extends StatefulWidget {
   final ArtObjectEntity artObject;
@@ -27,24 +27,33 @@ class _MapWidgetState extends State<MapWidget> {
       mapId: mapObjectId,
       point: Point(
           latitude: widget.artObject.lat, longitude: widget.artObject.lon),
-      icon: PlacemarkIcon.single(PlacemarkIconStyle(
-          image: BitmapDescriptor.fromAssetImage("assets/location.png"),
-          rotationType: RotationType.rotate)),
+      icon: PlacemarkIcon.single(
+        PlacemarkIconStyle(
+            image: BitmapDescriptor.fromAssetImage("assets/location.png"),
+            rotationType: RotationType.rotate),
+      ),
     );
     mapObjects.add(point);
 
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          widget.artObject.title,
+          style: const TextStyle(fontSize: 22),
+        ),
+        backgroundColor: const Color.fromARGB(200, 205, 234, 225),
+      ),
       body: Column(
         children: [
           Expanded(
               child: YandexMap(
-                mapObjects: mapObjects,
-                onMapCreated: (controller) async {
-                  mapControllerCompleter.complete(controller);
-                  await _moveToCurrentLocation(mapObjects.first.point.latitude,
-                      mapObjects.first.point.longitude);
-                },
-              )),
+            mapObjects: mapObjects,
+            onMapCreated: (controller) async {
+              mapControllerCompleter.complete(controller);
+              await _moveToCurrentLocation(mapObjects.first.point.latitude,
+                  mapObjects.first.point.longitude);
+            },
+          )),
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -74,18 +83,23 @@ class _MapWidgetState extends State<MapWidget> {
                 drivingOptions: const DrivingOptions(
                     initialAzimuth: 0, routesCount: 1, avoidTolls: true));
             Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => DrivingPageWidget(
-                      result: yandexDriving.result,
-                      session: yandexDriving.session,
-                      start: mapObjects.first,
-                      end: endPoint,
-                      artObject: widget.artObject,
-                    )));
+              context,
+              MaterialPageRoute(
+                builder: (context) => DrivingPageWidget(
+                  result: yandexDriving.result,
+                  session: yandexDriving.session,
+                  start: mapObjects.first,
+                  end: endPoint,
+                  artObject: widget.artObject,
+                ),
+              ),
+            );
           });
         },
-        child: const Icon(Icons.add_road),
+        child: const Icon(
+          Icons.navigation_outlined,
+          size: 35,
+        ),
       ),
     );
   }
@@ -113,13 +127,14 @@ class DrivingPageWidget extends StatefulWidget {
   final PlacemarkMapObject end;
   final ArtObjectEntity artObject;
 
-  const DrivingPageWidget(
-      {super.key,
-        required this.result,
-        required this.session,
-        required this.start,
-        required this.end,
-        required this.artObject});
+  const DrivingPageWidget({
+    required this.result,
+    required this.session,
+    required this.start,
+    required this.end,
+    required this.artObject,
+    super.key,
+  });
 
   @override
   State<DrivingPageWidget> createState() => _DrivingPageWidgetState();
@@ -184,7 +199,6 @@ class _DrivingPageWidgetState extends State<DrivingPageWidget> {
     });
 
     if (result.error != null) {
-      print('Error: ${result.error}');
       return;
     }
 

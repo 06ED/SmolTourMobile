@@ -7,7 +7,7 @@ import 'package:smolaton/utils/image_utils.dart';
 import 'package:smolaton/utils/load_animation.dart';
 
 import '../entities/impl/art_object_entity.dart';
-import '../utils/maps_route.dart';
+import 'maps_route.dart';
 
 class MainRoute extends StatefulWidget {
   const MainRoute({super.key});
@@ -25,6 +25,15 @@ class _MainRouteState extends State<MainRoute> {
             return Scaffold(
               backgroundColor: const Color.fromARGB(255, 141, 211, 187),
               body: _getArtObjectsWidget(state.artObjects),
+              floatingActionButton: FloatingActionButton(
+                backgroundColor: const Color.fromARGB(255, 205, 234, 225),
+                onPressed: () =>
+                    Navigator.pushNamed(context, "/create_art_object"),
+                child: const Icon(
+                  Icons.add,
+                  size: 30,
+                ),
+              ),
             );
           }
           return const LoadingAnimation();

@@ -160,7 +160,7 @@ class LoadingPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     Paint myArc = Paint()
-      ..color = Colors.red
+      ..color = const Color.fromARGB(200, 205, 234, 225)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 5
       ..strokeCap = StrokeCap.round;

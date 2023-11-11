@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'dart:typed_data';
-
 import 'package:http/http.dart';
 import 'package:oauth2_client/oauth2_helper.dart';
 import 'package:smolaton/settings.dart';
@@ -27,5 +24,10 @@ class AuthHttpClient extends OAuth2Helper {
   @override
   Future<Response> delete(String url, {Map<String, String>? headers, Client? httpClient}) {
     return super.delete(kBaseUrl + url, headers: headers, httpClient: httpClient);
+  }
+
+  @override
+  Future<Response> put(String url, {Map<String, String>? headers, body, Client? httpClient}) {
+    return super.put(kBaseUrl + url, headers: headers, body: body, httpClient: httpClient);
   }
 }
